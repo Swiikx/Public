@@ -1,0 +1,116 @@
+# ===== Secrets & credentials =====
+# Ne jamais commiter de secrets, clés, tokens, mots de passe
+.env
+.env.*
+!.env.example
+*.env
+secrets.*
+*.secret
+*secrets.auto.tfvars
+*.auto.tfvars
+credentials
+credentials.*
+config.local.*
+
+# Clés privées / certificats
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa
+id_ed25519
+id_ecdsa
+id_dsa
+*_rsa
+*_ed25519
+known_hosts
+
+# WireGuard / VPN
+*.conf.wg
+wg*.conf
+*wireguard*
+.wireguard/
+
+# SSH
+.ssh/
+
+# Cloud / Infra
+.aws/
+.azure/
+.gcp/
+.kube/config
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+!terraform.tfvars.example
+.vagrant/
+*.retry
+
+# Ansible
+*.vault
+vault.yml
+vault_pass.txt
+.vault_pass
+
+# ===== Environnements / builds =====
+node_modules/
+dist/
+build/
+out/
+.next/
+.nuxt/
+.cache/
+coverage/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Rust
+target/
+Cargo.lock
+
+# Java
+*.class
+*.jar
+*.war
+target/
+
+# ===== IDE / OS =====
+.claude/
+.vscode/
+!.vscode/settings.json.example
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Divers =====
+*.bak
+*.tmp
+*.old
+.history/
