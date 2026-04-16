@@ -71,13 +71,13 @@ jobs:
           directory: ${{ env.WORKDIR }}
           framework: terraform
           output_format: cli
-          soft_fail: true
+          soft_fail: false
 
       - name: tfsec
         uses: aquasecurity/tfsec-action@v1.0.3
         with:
           working_directory: ${{ env.WORKDIR }}
-          soft_fail: true
+          soft_fail: false
 
   terraform-test:
     name: Terraform Test (unit)
