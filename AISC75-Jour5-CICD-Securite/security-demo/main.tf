@@ -32,3 +32,5 @@ resource "aws_security_group" "windows_public" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+# trigger ci
