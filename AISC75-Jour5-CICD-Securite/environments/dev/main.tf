@@ -26,6 +26,16 @@ module "nginx_dev" {
       port        = 3000
       server_name = "api.dev.monapp.local"
       root_path   = "/var/www/backend"
+    },
+    {
+      nom         = "api-v2"
+      port        = 8080
+      server_name = "api-v2.dev.monapp.local"
+      root_path   = "/var/www/api-v2"
+      locations = [
+        { path = "/health", static = true },
+        { path = "/v2", proxy_pass = "http://localhost:4000" },
+      ]
     }
   ]
 }

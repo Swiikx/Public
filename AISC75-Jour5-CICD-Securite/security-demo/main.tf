@@ -21,3 +21,14 @@ resource "aws_security_group" "bastion" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+# RDP ouvert sur Internet, typiquement ce qui se fait tagger en audit
+resource "aws_security_group" "windows_public" {
+  name = "win-public"
+  ingress {
+    from_port   = 3389
+    to_port     = 3389
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
