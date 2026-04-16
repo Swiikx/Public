@@ -1,0 +1,144 @@
+name: "Terraform Advanced CI"
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'lab-terraform-cicd-advanced/**'
+      - '.github/workflows/terraform-ci.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'lab-terraform-cicd-advanced/**'
+      - '.github/workflows/terraform-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+
+env:
+  TF_VERSION: "1.9.8"
+
+defaults:
+  run:
+    working-directory: lab-terraform-cicd-advanced
+
+jobs:
+  lint-security:
+    name: "Lint & Security Scan"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v4
+
+      - name: "Setup Terraform"
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: "Terraform Format Check"
+        run: terraform fmt -check -recursive -diff
+
+      - name: "Terraform Init"
+        run: terraform init
+
+      - name: "Terraform Validate"
+        run: terraform validate
+
+      - name: "Setup TFLint"
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.50.3
+
+      - name: "Run TFLint"
+        run: tflint --recursive
+
+      - name: "Run Checkov"
+        id: checkov
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: lab-terraform-cicd-advanced
+          framework: terraform
+          output_format: cli,sarif
+          output_file_path: console,results.sarif
+          soft_fail: true
+
+      - name: "Upload Checkov SARIF results"
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+
+  plan:
+    name: "Terraform Plan"
+    runs-on: ubuntu-latest
+    needs: lint-security
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v4
+
+      - name: "Setup Terraform"
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: "Terraform Init"
+        run: terraform init
+
+      - name: "Terraform Plan DEV"
+        run: terraform plan -var-file=dev.tfvars -out=dev.tfplan
+
+      - name: "Terraform Plan STAGING"
+        run: terraform plan -var-file=staging.tfvars -out=staging.tfplan
+
+      - name: "Terraform Plan PROD"
+        run: terraform plan -var-file=prod.tfvars -out=prod.tfplan
+
+      - name: "Export DEV plan"
+        run: terraform show -json dev.tfplan > dev-plan.json
+
+      - name: "Export STAGING plan"
+        run: terraform show -json staging.tfplan > staging-plan.json
+
+      - name: "Export PROD plan"
+        run: terraform show -json prod.tfplan > prod-plan.json
+
+      - name: "Estimate DEV"
+        run: python3 scripts/estimate.py dev-plan.json > dev-estimate.txt
+
+      - name: "Estimate STAGING"
+        run: python3 scripts/estimate.py staging-plan.json > staging-estimate.txt
+
+      - name: "Estimate PROD"
+        run: python3 scripts/estimate.py prod-plan.json > prod-estimate.txt
+
+      - name: "Upload plan artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-advanced-plans
+          path: |
+            lab-terraform-cicd-advanced/dev-plan.json
+            lab-terraform-cicd-advanced/staging-plan.json
+            lab-terraform-cicd-advanced/prod-plan.json
+            lab-terraform-cicd-advanced/dev-estimate.txt
+            lab-terraform-cicd-advanced/staging-estimate.txt
+            lab-terraform-cicd-advanced/prod-estimate.txt
+
+      - name: "Comment PR with estimates"
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const base = "lab-terraform-cicd-advanced";
+            const dev = fs.readFileSync(`${base}/dev-estimate.txt`, "utf8");
+            const staging = fs.readFileSync(`${base}/staging-estimate.txt`, "utf8");
+            const prod = fs.readFileSync(`${base}/prod-estimate.txt`, "utf8");
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Terraform logical estimation\n\`\`\`\nDEV\n${dev}\nSTAGING\n${staging}\nPROD\n${prod}\n\`\`\``
+            });
