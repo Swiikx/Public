@@ -1,0 +1,80 @@
+stages:
+  - validate
+  - security
+  - test
+  - plan
+
+variables:
+  TF_VERSION: "1.9.8"
+  WORKDIR: "$CI_PROJECT_DIR/AISC75-Jour5-CICD-Securite"
+
+.base_terraform:
+  image:
+    name: hashicorp/terraform:$TF_VERSION
+    entrypoint: [""]
+  before_script:
+    - cd "$WORKDIR"
+
+fmt:
+  extends: .base_terraform
+  stage: validate
+  script:
+    - terraform fmt -check -recursive -diff
+
+validate-module:
+  extends: .base_terraform
+  stage: validate
+  script:
+    - cd modules/nginx-config
+    - terraform init -backend=false
+    - terraform validate
+
+validate-envs:
+  extends: .base_terraform
+  stage: validate
+  script:
+    - for env in environments/dev environments/prod; do
+        (cd "$env" && terraform init -backend=false && terraform validate);
+      done
+
+checkov:
+  stage: security
+  image:
+    name: bridgecrew/checkov:latest
+    entrypoint: [""]
+  script:
+    - checkov -d "$WORKDIR" --framework terraform --compact --soft-fail
+
+tfsec:
+  stage: security
+  image:
+    name: aquasec/tfsec:latest
+    entrypoint: [""]
+  script:
+    - tfsec "$WORKDIR" --soft-fail
+
+terraform-test:
+  extends: .base_terraform
+  stage: test
+  script:
+    - cd modules/nginx-config
+    - terraform init -backend=false
+    - terraform test
+
+plan-dev:
+  extends: .base_terraform
+  stage: plan
+  script:
+    - cd environments/dev
+    - terraform init
+    - terraform plan -no-color
+
+plan-prod:
+  extends: .base_terraform
+  stage: plan
+  script:
+    - cd environments/prod
+    - terraform init
+    - terraform plan -no-color
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
