@@ -4,7 +4,7 @@ Projets personnels et side projects. Un dossier par projet, autonome, avec son `
 
 | Projet | Description | Stack | Statut |
 |---|---|---|---|
-| — | Aucun projet pour l'instant | — | — |
+| [QG ESD](qg-esd/) | Base de connaissances auto-hébergée pour un mastère cybersécurité, publiée par une chaîne CI/CD vers un lab Proxmox | Proxmox, MkDocs, GitHub Actions, nginx, systemd | `en cours` |
 
 Statuts utilisés : `idée` · `en cours` · `pause` · `terminé` · `archivé`.
 

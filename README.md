@@ -61,7 +61,9 @@ python3 scripts/check_links.py .
 
 ### Projets
 
-Aucun pour l'instant — voir [`projects/README.md`](projects/README.md).
+| Projet | Sujet | Stack | Statut |
+|---|---|---|---|
+| [QG ESD](projects/qg-esd/) | Base de connaissances auto-hébergée, publiée par une chaîne CI/CD vers un lab Proxmox. Dépôt de travail privé, voir la page du projet | Proxmox, MkDocs, GitHub Actions, nginx, systemd | `en cours` |
 
 ## Démarrer un nouveau projet
 
