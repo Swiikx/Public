@@ -4,12 +4,12 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - 'lab-terraform-cicd-advanced/**'
+      - 'labs/lab-terraform-cicd-advanced/**'
       - '.github/workflows/terraform-ci.yml'
   pull_request:
     branches: [main]
     paths:
-      - 'lab-terraform-cicd-advanced/**'
+      - 'labs/lab-terraform-cicd-advanced/**'
       - '.github/workflows/terraform-ci.yml'
   workflow_dispatch:
 
@@ -23,7 +23,7 @@ env:
 
 defaults:
   run:
-    working-directory: lab-terraform-cicd-advanced
+    working-directory: labs/lab-terraform-cicd-advanced
 
 jobs:
   lint-security:
@@ -59,7 +59,7 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@v12
         with:
-          directory: lab-terraform-cicd-advanced
+          directory: labs/lab-terraform-cicd-advanced
           framework: terraform
           output_format: cli,sarif
           output_file_path: console,results.sarif
@@ -119,12 +119,12 @@ jobs:
         with:
           name: terraform-advanced-plans
           path: |
-            lab-terraform-cicd-advanced/dev-plan.json
-            lab-terraform-cicd-advanced/staging-plan.json
-            lab-terraform-cicd-advanced/prod-plan.json
-            lab-terraform-cicd-advanced/dev-estimate.txt
-            lab-terraform-cicd-advanced/staging-estimate.txt
-            lab-terraform-cicd-advanced/prod-estimate.txt
+            labs/lab-terraform-cicd-advanced/dev-plan.json
+            labs/lab-terraform-cicd-advanced/staging-plan.json
+            labs/lab-terraform-cicd-advanced/prod-plan.json
+            labs/lab-terraform-cicd-advanced/dev-estimate.txt
+            labs/lab-terraform-cicd-advanced/staging-estimate.txt
+            labs/lab-terraform-cicd-advanced/prod-estimate.txt
 
       - name: "Comment PR with estimates"
         if: github.event_name == 'pull_request'
@@ -132,7 +132,7 @@ jobs:
         with:
           script: |
             const fs = require("fs");
-            const base = "lab-terraform-cicd-advanced";
+            const base = "labs/lab-terraform-cicd-advanced";
             const dev = fs.readFileSync(`${base}/dev-estimate.txt`, "utf8");
             const staging = fs.readFileSync(`${base}/staging-estimate.txt`, "utf8");
             const prod = fs.readFileSync(`${base}/prod-estimate.txt`, "utf8");

@@ -1,0 +1,10 @@
+# Copier en terraform.tfvars puis renseigner.
+# terraform.tfvars est ignoré par git : n'y mettre aucun secret qu'on voudrait versionner.
+# Les credentials passent par des variables d'environnement ou OIDC, jamais par ce fichier.
+
+project_name = "mon-projet"
+environment  = "dev"
+
+tags = {
+  owner = "<prenom.nom>"
+}

@@ -47,6 +47,11 @@ wg*.conf
 .terraform.lock.hcl
 terraform.tfvars
 !terraform.tfvars.example
+*.tfplan
+*-plan.json
+*-estimate.txt
+crash.log
+crash.*.log
 .vagrant/
 *.retry
 

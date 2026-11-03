@@ -1,0 +1,35 @@
+name: "Docs — liens Markdown"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/*.md'
+      - 'scripts/check_links.py'
+      - '.github/workflows/docs-links.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.md'
+      - 'scripts/check_links.py'
+      - '.github/workflows/docs-links.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-links:
+    name: "Liens relatifs"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Vérifie uniquement les liens relatifs, sur le disque : aucun appel
+      # réseau, donc pas de faux rouge quand un site externe est down.
+      - name: "Vérifier les liens relatifs des fichiers Markdown"
+        run: python3 scripts/check_links.py .
