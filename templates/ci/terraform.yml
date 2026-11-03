@@ -1,0 +1,112 @@
+# Template CI Terraform.
+#
+# Copier vers .github/workflows/<projet>-terraform.yml puis remplacer
+# CHEMIN/DU/PROJET par le chemin réel (ex. projects/mon-projet).
+# Sans le filtre paths, ce workflow tourne à chaque commit du dépôt.
+
+name: "Terraform CI — CHEMIN/DU/PROJET"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'CHEMIN/DU/PROJET/**'
+      - '.github/workflows/terraform.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'CHEMIN/DU/PROJET/**'
+      - '.github/workflows/terraform.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+
+env:
+  TF_VERSION: "1.9.8"
+
+defaults:
+  run:
+    working-directory: CHEMIN/DU/PROJET
+
+jobs:
+  lint-security:
+    name: "Lint & Security"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: "Format check"
+        run: terraform fmt -check -recursive -diff
+
+      - name: "Init"
+        run: terraform init -backend=false
+
+      - name: "Validate"
+        run: terraform validate
+
+      - uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.53.0
+
+      - name: "TFLint"
+        run: tflint --recursive
+
+      - name: "Checkov"
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: CHEMIN/DU/PROJET
+          framework: terraform
+          output_format: cli,sarif
+          output_file_path: console,results.sarif
+          # soft_fail: true tant que le projet n'est pas conforme,
+          # à retirer quand les findings sont traités.
+          soft_fail: true
+
+      - name: "Upload SARIF"
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+
+  plan:
+    name: "Plan"
+    runs-on: ubuntu-latest
+    needs: lint-security
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      # Credentials : passer par OIDC (role-to-assume) plutôt que par des clés
+      # longue durée en secrets. Rien en dur dans ce fichier.
+      # - uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+      #     aws-region: eu-west-3
+
+      - name: "Init"
+        run: terraform init
+
+      - name: "Plan"
+        run: terraform plan -var-file=dev.tfvars -out=dev.tfplan
+
+      - name: "Export plan JSON"
+        run: terraform show -json dev.tfplan > dev-plan.json
+
+      - name: "Upload plan"
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: |
+            CHEMIN/DU/PROJET/dev.tfplan
+            CHEMIN/DU/PROJET/dev-plan.json
+          retention-days: 14

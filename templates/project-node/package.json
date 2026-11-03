@@ -1,0 +1,21 @@
+{
+  "name": "mon-projet",
+  "version": "0.1.0",
+  "description": "<Description courte du projet.>",
+  "type": "module",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "lint": "eslint src",
+    "test": "node --test",
+    "build": "echo \"pas d'étape de build\" && exit 0"
+  },
+  "keywords": [],
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "eslint": "^9.12.0"
+  }
+}

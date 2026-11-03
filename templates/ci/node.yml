@@ -1,0 +1,63 @@
+# Template CI Node.
+#
+# Copier vers .github/workflows/<projet>-node.yml puis remplacer
+# CHEMIN/DU/PROJET par le chemin réel (ex. projects/mon-projet).
+# Sans le filtre paths, ce workflow tourne à chaque commit du dépôt.
+
+name: "Node CI — CHEMIN/DU/PROJET"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'CHEMIN/DU/PROJET/**'
+      - '.github/workflows/node.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'CHEMIN/DU/PROJET/**'
+      - '.github/workflows/node.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: CHEMIN/DU/PROJET
+
+jobs:
+  test:
+    name: "Lint, tests & build (node ${{ matrix.node-version }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["20", "22"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: CHEMIN/DU/PROJET/package-lock.json
+
+      # npm ci exige un package-lock.json versionné : il garantit
+      # que la CI installe exactement les mêmes versions qu'en local.
+      - name: "Install"
+        run: npm ci
+
+      - name: "Lint"
+        run: npm run lint
+
+      - name: "Test"
+        run: npm test
+
+      - name: "Build"
+        run: npm run build
+
+      - name: "Audit des dépendances"
+        run: npm audit --audit-level=high
+        continue-on-error: true
