@@ -5,7 +5,7 @@ Lab du cours AISC75. L'idée c'est de monter une pipeline CI/CD propre autour d'
 ## Arbo
 
 ```
-lab-terraform-cicd-advanced/
+labs/lab-terraform-cicd-advanced/
 ├── main.tf
 ├── variables.tf
 ├── outputs.tf
@@ -16,12 +16,12 @@ lab-terraform-cicd-advanced/
     └── compliance/
 ```
 
-Le workflow est à la racine du repo (`.github/workflows/terraform-ci.yml`) parce que GitHub Actions ne lit que cet emplacement. Il est scopé sur `lab-terraform-cicd-advanced/**` via un filtre `paths`.
+Le workflow est à la racine du repo (`.github/workflows/terraform-ci.yml`) parce que GitHub Actions ne lit que cet emplacement. Il est scopé sur `labs/lab-terraform-cicd-advanced/**` via un filtre `paths`.
 
 ## Commandes
 
 ```bash
-cd lab-terraform-cicd-advanced
+cd labs/lab-terraform-cicd-advanced
 terraform fmt -recursive
 terraform init
 terraform validate
