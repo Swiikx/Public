@@ -9,7 +9,7 @@ Tout ce qui est ici est volontairement ouvert — aucun secret, aucune donnée s
 |---|---|
 | [`labs/`](labs/) | TP et labs de cours, un dossier par TP |
 | [`projects/`](projects/) | Projets personnels et side projects |
-| [`docs/`](docs/) | Fiches de révision, cheatsheets, veille, comptes rendus |
+| [`docs/`](docs/) | Fiches de révision cybersécurité (normes ISO, RGPD, NIS2, SOC, vulnérabilités, cryptographie), cheatsheets, veille, comptes rendus |
 | [`templates/`](templates/) | Squelettes de démarrage (Terraform, Python, Node, Docker, write-up, compte rendu) et workflows CI prêts à copier |
 | [`scripts/`](scripts/) | Outillage du dépôt (vérification des liens Markdown) |
 | [`.github/workflows/`](.github/workflows/) | Workflows GitHub Actions actifs (GitHub ne lit que cet emplacement) |
@@ -58,6 +58,16 @@ python3 scripts/check_links.py .
 | TP | Sujet | Stack |
 |---|---|---|
 | [TP5](labs/lab-terraform-cicd-advanced/) | Pipeline CI/CD autour d'un Terraform sans provider, estimation logique coût/capacité | Terraform, GitHub Actions, TFLint, Checkov, Python |
+
+### Fiches de révision
+
+Sécurité des systèmes d'information, axe défense et conformité. Index complet dans [`docs/fiches/`](docs/fiches/).
+
+| Thème | Fiches |
+|---|---|
+| Gouvernance et conformité | [ISO/IEC 27001](docs/fiches/iso-27001-smsi.md) · [ISO/IEC 27005](docs/fiches/iso-27005-gestion-du-risque.md) · [ISO 22301](docs/fiches/iso-22301-continuite.md) · [RGPD](docs/fiches/rgpd.md) · [NIS2](docs/fiches/nis2.md) |
+| Défense et opérations | [Réponse à incident](docs/fiches/reponse-a-incident.md) · [SOC et détection](docs/fiches/soc-journalisation-detection.md) · [Vulnérabilités](docs/fiches/vulnerabilites-cve-cvss.md) · [Cryptographie](docs/fiches/cryptographie-appliquee.md) |
+| Mémos | [Glossaire cyber](docs/cheatsheets/glossaire-cyber.md) · [Git](docs/cheatsheets/git.md) |
 
 ### Projets
 
