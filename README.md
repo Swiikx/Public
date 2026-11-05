@@ -66,6 +66,7 @@ Sécurité des systèmes d'information, axe défense et conformité. Index compl
 | Thème | Fiches |
 |---|---|
 | Gouvernance et conformité | [ISO/IEC 27001](docs/fiches/iso-27001-smsi.md) · [ISO/IEC 27005](docs/fiches/iso-27005-gestion-du-risque.md) · [ISO 22301](docs/fiches/iso-22301-continuite.md) · [RGPD](docs/fiches/rgpd.md) · [NIS2](docs/fiches/nis2.md) |
+| Pratique du test d'intrusion | [Cadre légal](docs/fiches/cadre-legal-test-intrusion.md) · [Rapport et risque](docs/fiches/rapport-test-intrusion.md) · [Python sécurisé](docs/fiches/python-developpement-securise.md) |
 | Défense et opérations | [Réponse à incident](docs/fiches/reponse-a-incident.md) · [SOC et détection](docs/fiches/soc-journalisation-detection.md) · [Vulnérabilités](docs/fiches/vulnerabilites-cve-cvss.md) · [Cryptographie](docs/fiches/cryptographie-appliquee.md) |
 | Mémos | [Glossaire cyber](docs/cheatsheets/glossaire-cyber.md) · [Git](docs/cheatsheets/git.md) |
 

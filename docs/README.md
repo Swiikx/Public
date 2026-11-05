@@ -23,6 +23,12 @@ Index détaillé et périmètre dans [`fiches/README.md`](fiches/README.md).
 - [RGPD](fiches/rgpd.md) — principes, bases légales, droits, violations, AIPD, sanctions.
 - [NIS2](fiches/nis2.md) — entités concernées, obligations, délais de notification, transposition française.
 
+**Pratique professionnelle du test d'intrusion**
+
+- [Cadre légal et contractuel](fiches/cadre-legal-test-intrusion.md) — ce qui rend une mission licite : mandat, périmètre, règles d'engagement.
+- [Rapport et communication du risque](fiches/rapport-test-intrusion.md) — structure du livrable, cotation, plan de remédiation.
+- [Python — développement sécurisé](fiches/python-developpement-securise.md) — pièges du langage, secrets, dépendances, outillage.
+
 **Défense et opérations**
 
 - [Réponse à incident](fiches/reponse-a-incident.md) — cycle de vie, confinement, éradication, retour d'expérience.
