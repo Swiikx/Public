@@ -13,6 +13,13 @@ Le dépôt est public. Ne jamais commiter :
 
 Le [`.gitignore`](.gitignore) couvre déjà la majorité de ces cas, mais il ne remplace pas une relecture du diff avant commit.
 
+Depuis, un hook `pre-commit` applique cette règle automatiquement : il refuse les
+formats de secrets connus, le matériel de clé, les fichiers volumineux et les
+termes d'une liste locale « ne pas publier ». Mise en place et limites dans
+[`.githooks/README.md`](.githooks/README.md). Il ne dispense pas de relire le
+diff : il attrape ce qu'on peut décrire par un motif, pas ce qu'on n'aurait pas
+dû écrire.
+
 Pour les valeurs d'exemple, utiliser des fichiers `*.example` versionnés et laisser le vrai fichier ignoré :
 
 ```

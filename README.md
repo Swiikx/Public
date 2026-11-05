@@ -12,6 +12,7 @@ Tout ce qui est ici est volontairement ouvert — aucun secret, aucune donnée s
 | [`docs/`](docs/) | Fiches de révision cybersécurité (normes ISO, RGPD, NIS2, SOC, vulnérabilités, cryptographie), cheatsheets, veille, comptes rendus |
 | [`templates/`](templates/) | Squelettes de démarrage (Terraform, Python, Node, Docker, write-up, compte rendu) et workflows CI prêts à copier |
 | [`scripts/`](scripts/) | Outillage du dépôt (vérification des liens Markdown) |
+| [`.githooks/`](.githooks/) | Garde-fou au commit : secrets, matériel de clé, termes à ne pas publier |
 | [`.github/workflows/`](.github/workflows/) | Workflows GitHub Actions actifs (GitHub ne lit que cet emplacement) |
 
 ```
@@ -44,12 +45,26 @@ Tout ce qui est ici est volontairement ouvert — aucun secret, aucune donnée s
 |---|---|---|
 | [`terraform-ci.yml`](.github/workflows/terraform-ci.yml) | Changement dans `labs/lab-terraform-cicd-advanced/**` | `fmt` → `validate` → TFLint → Checkov → `plan` 3 envs + artefacts |
 | [`docs-links.yml`](.github/workflows/docs-links.yml) | Changement dans un `.md` | Vérifie que les liens relatifs pointent sur un fichier existant |
+| [`secrets-scan.yml`](.github/workflows/secrets-scan.yml) | Tout push et toute PR sur `main` | Contrôle tous les fichiers suivis : secrets, matériel de clé, fichiers volumineux |
 
-Vérification des liens en local :
+Vérifications en local :
 
 ```bash
 python3 scripts/check_links.py .
 ```
+
+```bash
+python3 .githooks/check-secrets.py --all
+```
+
+Le dépôt étant public, un hook `pre-commit` bloque les secrets avant qu'ils ne
+partent. Il s'active par clone, voir [`.githooks/README.md`](.githooks/README.md) :
+
+```bash
+git config core.hooksPath .githooks
+```
+
+Signalement d'un problème de sécurité : [`SECURITY.md`](SECURITY.md).
 
 ## Index
 

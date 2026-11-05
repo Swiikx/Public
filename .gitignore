@@ -114,6 +114,10 @@ target/
 Thumbs.db
 desktop.ini
 
+# Liste des termes a ne jamais publier, lue par le hook pre-commit. Elle
+# contient ce qu'il faut cacher, donc elle ne part pas. Le .example suffit.
+.githooks/ne-pas-publier.local.txt
+
 # ===== Divers =====
 *.bak
 *.tmp

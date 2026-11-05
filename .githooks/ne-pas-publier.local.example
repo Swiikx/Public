@@ -1,0 +1,26 @@
+# Liste des termes qui ne doivent jamais etre publies dans ce depot.
+#
+# A copier en .githooks/ne-pas-publier.local.txt, exclu par .gitignore :
+#     cp .githooks/ne-pas-publier.local.example .githooks/ne-pas-publier.local.txt
+#
+# Pourquoi ce fichier n'est PAS versionne : il contient precisement ce qu'il
+# faut cacher. Une liste de termes sensibles ne peut pas vivre dans le depot
+# public qu'elle protege.
+#
+# Un terme par ligne. Comparaison insensible a la casse. Lignes vides et
+# lignes commencant par # ignorees. Le hook n'affiche jamais le terme trouve,
+# seulement sa longueur : le message peut finir dans un journal ou une capture.
+#
+# A renseigner avec ce qui ne doit pas sortir des depots prives :
+#
+#   - nom de domaine et sous-domaines du lab personnel
+#   - noms d'hotes et de machines virtuelles
+#   - plages d'adresses IP reelles et adresses de passerelles
+#   - raison sociale de l'employeur et ses abreviations
+#   - noms de comptes de service
+#   - reference de promotion ou identifiants scolaires
+#
+# Exemples de forme, a remplacer :
+# mon-lab.exemple-ddns.org
+# srv-exemple-01
+# 203.0.113.

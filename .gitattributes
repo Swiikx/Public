@@ -1,2 +1,7 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Les hooks tournent sous Git Bash : un CRLF dans le shebang casse le lancement
+# ("bad interpreter"). text=auto les convertirait sur Windows, d'ou ce forcage.
+.githooks/** text eol=lf
+

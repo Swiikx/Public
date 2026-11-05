@@ -1,0 +1,29 @@
+#!/bin/sh
+# Hook pre-commit du depot Public.
+#
+# Activation (une fois par clone, non versionnable) :
+#     git config core.hooksPath .githooks
+#
+# Contournement volontaire : git commit --no-verify
+set -u
+
+repertoire=$(dirname "$0")
+
+interpreteur=""
+for candidat in python3 python py; do
+    if command -v "$candidat" >/dev/null 2>&1; then
+        interpreteur="$candidat"
+        break
+    fi
+done
+
+# Echec ferme : sans Python le controle ne tourne pas, et ce depot est public.
+# Un commit refuse se rattrape, un secret publie se revoque.
+if [ -z "$interpreteur" ]; then
+    echo "pre-commit : aucun interpreteur Python trouve (python3, python, py)." >&2
+    echo "             Controle de secrets impossible, commit refuse." >&2
+    echo "             Forcer en connaissance de cause : git commit --no-verify" >&2
+    exit 1
+fi
+
+exec "$interpreteur" "$repertoire/check-secrets.py"
